@@ -4,12 +4,12 @@ public class Contact {
     public String address;
     public String city;
     public String state;
-    public String zip;
+    public int zip;
     public String phoneNumber;
     public String email;
     public String type;
 
-    public Contact(String firstName, String lastName, String address, String city, String state, String zip, String phone_number, String email, String type) {
+    public Contact(String firstName, String lastName, String address, String city, String state, int zip, String phone_number, String email, String type) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;

@@ -8,21 +8,30 @@ public class AddressBookService {
     private static final String user = "root";
     private static final String password = "krishna7609";
     public static List<Contact> contacts = new ArrayList<>();
+    public static Connection connection;
+    public static Statement statement;
 
-    public static List<Contact> retrieveEntriesFromDataBaseForAddressBook() {
+    public static void getConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(
-                    URL, user, password);
-            Statement stmt = con.createStatement();
-            ResultSet resultSet = stmt.executeQuery("select * from address_book;");
+            connection = DriverManager.getConnection(URL, user, password);
+            statement = connection.createStatement();
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public static List<Contact> retrieveEntriesFromDataBaseForAddressBook() {
+        getConnection();
+        try {
+            ResultSet resultSet = statement.executeQuery("select * from address_book;");
             while (resultSet.next()) {
                 String firstName = resultSet.getString("First_Name");
                 String lastName = resultSet.getString("Last_Name");
                 String address = resultSet.getString("Address");
                 String city  = resultSet.getString("City");
                 String state = resultSet.getString("State");
-                String zip  = resultSet.getString("Zip");
+                int zip  = resultSet.getInt("Zip");
                 String phone_Number = resultSet.getString("Phone_Number");
                 String email = resultSet.getString("Email");
                 String type = resultSet.getString("Type");
@@ -31,11 +40,29 @@ public class AddressBookService {
             contacts.forEach(data -> System.out.println(data.firstName
                     +" "+data.lastName+" "+data.city+" "+data.state+" "+data.zip+" "+ data.phoneNumber+" "+ data.email));
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return contacts;
+    }
+
+    public static String updateAddressBook(String first_name, String phone_number) {
+        getConnection();
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement("update address_book set phone_number=? where first_name =?");
+            preparedStatement.setString(1, phone_number);
+            preparedStatement.setString(2,first_name);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        retrieveEntriesFromDataBaseForAddressBook();
+        for (Contact data: contacts) {
+            if (data.firstName.equals(first_name))
+                return data.phoneNumber;
+        }
+        return null;
     }
 }
