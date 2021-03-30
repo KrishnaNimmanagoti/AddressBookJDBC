@@ -1,3 +1,5 @@
+import java.util.Date;
+
 public class Contact {
     public String firstName;
     public String lastName;
@@ -8,8 +10,9 @@ public class Contact {
     public String phoneNumber;
     public String email;
     public String type;
+    public Date date;
 
-    public Contact(String firstName, String lastName, String address, String city, String state, int zip, String phone_number, String email, String type) {
+    public Contact(String firstName, String lastName, String address, String city, String state, int zip, String phone_number, String email, String type, Date date) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -19,6 +22,7 @@ public class Contact {
         this.phoneNumber = phone_number;
         this.email = email;
         this.type = type;
+        this.date = date;
 
     }
 }

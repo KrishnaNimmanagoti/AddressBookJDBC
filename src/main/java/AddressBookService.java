@@ -1,6 +1,7 @@
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AddressBookService {
@@ -21,24 +22,25 @@ public class AddressBookService {
         }
     }
 
-    public static List<Contact> retrieveEntriesFromDataBaseForAddressBook() {
+    public static List<Contact> retrieveEntriesFromDataBaseForAddressBook(String sql) {
         getConnection();
         try {
-            ResultSet resultSet = statement.executeQuery("select * from address_book;");
+            ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 String firstName = resultSet.getString("First_Name");
                 String lastName = resultSet.getString("Last_Name");
                 String address = resultSet.getString("Address");
-                String city  = resultSet.getString("City");
+                String city = resultSet.getString("City");
                 String state = resultSet.getString("State");
-                int zip  = resultSet.getInt("Zip");
+                int zip = resultSet.getInt("Zip");
                 String phone_Number = resultSet.getString("Phone_Number");
                 String email = resultSet.getString("Email");
                 String type = resultSet.getString("Type");
-                contacts.add(new Contact(firstName, lastName, address, city, state, zip, phone_Number, email, type));
+                Date date = resultSet.getDate("start");
+                contacts.add(new Contact(firstName, lastName, address, city, state, zip, phone_Number, email, type, date));
             }
             contacts.forEach(data -> System.out.println(data.firstName
-                    +" "+data.lastName+" "+data.city+" "+data.state+" "+data.zip+" "+ data.phoneNumber+" "+ data.email));
+                    + " " + data.lastName + " " + data.city + " " + data.state + " " + data.zip + " " + data.phoneNumber + " " + data.email + " " + data.type + " " + data.date));
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -52,14 +54,14 @@ public class AddressBookService {
         try {
             preparedStatement = connection.prepareStatement("update address_book set phone_number=? where first_name =?");
             preparedStatement.setString(1, phone_number);
-            preparedStatement.setString(2,first_name);
+            preparedStatement.setString(2, first_name);
             preparedStatement.executeUpdate();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        retrieveEntriesFromDataBaseForAddressBook();
-        for (Contact data: contacts) {
+        retrieveEntriesFromDataBaseForAddressBook("select * from address_book;");
+        for (Contact data : contacts) {
             if (data.firstName.equals(first_name))
                 return data.phoneNumber;
         }

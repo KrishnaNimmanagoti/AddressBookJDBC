@@ -7,7 +7,7 @@ public class AddressBookJDBCtest {
     @Test
     public void retrieveEntriesFromDataBaseForAddressBookTest() {
         AddressBookService addressBookService = new AddressBookService();
-        List<Contact> data = addressBookService.retrieveEntriesFromDataBaseForAddressBook();
+        List<Contact> data = addressBookService.retrieveEntriesFromDataBaseForAddressBook("select * from address_book;");
         Assertions.assertEquals(4, data.size());
 
     }
@@ -19,5 +19,13 @@ public class AddressBookJDBCtest {
         String phone_number = "123456789";
         String phone_numberUpdated = addressBookService.updateAddressBook(first_name, phone_number);
         Assertions.assertEquals(phone_number, phone_numberUpdated);
+    }
+
+    @Test
+    public void retriveEntryByDateTest() {
+        AddressBookService addressBookService = new AddressBookService();
+        String sql = "SELECT * FROM address_book WHERE start BETWEEN CAST('2016,-01-01' AS DATE) AND DATE(NOW());";
+        List<Contact> data = addressBookService.retrieveEntriesFromDataBaseForAddressBook(sql);
+        Assertions.assertEquals(2, data.size());
     }
 }
