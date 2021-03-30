@@ -28,4 +28,16 @@ public class AddressBookJDBCtest {
         List<Contact> data = addressBookService.retrieveEntriesFromDataBaseForAddressBook(sql);
         Assertions.assertEquals(2, data.size());
     }
+
+    @Test
+    public void retriveEntryByStateOrCityTest() {
+        AddressBookService addressBookService = new AddressBookService();
+        AddressBookService addressBookService2 = new AddressBookService();
+        String sql1 = "select * from address_book where state = 'Maharashtra';";
+        String sql2 = "select * from address_book where city = 'Hyderabad';";
+        List<Contact> dataByState =addressBookService.retrieveEntriesFromDataBaseForAddressBook(sql1);
+        List<Contact> dataByCity = addressBookService2.retrieveEntriesFromDataBaseForAddressBook(sql2);
+        Assertions.assertEquals(1, dataByState.size());
+        Assertions.assertEquals(3, dataByCity.size());
+    }
 }

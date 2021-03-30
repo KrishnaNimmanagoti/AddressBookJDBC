@@ -5,14 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 public class AddressBookService {
-    private static final String URL = "jdbc:mysql://localhost:3306/address_book_service?useSSL=false";
-    private static final String user = "root";
-    private static final String password = "krishna7609";
-    public static List<Contact> contacts = new ArrayList<>();
+    private final String URL = "jdbc:mysql://localhost:3306/address_book_service?useSSL=false";
+    private final String user = "root";
+    private final String password = "krishna7609";
+    public List<Contact> contacts = new ArrayList<>();
     public static Connection connection;
     public static Statement statement;
 
-    public static void getConnection() {
+    public void getConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(URL, user, password);
@@ -22,7 +22,7 @@ public class AddressBookService {
         }
     }
 
-    public static List<Contact> retrieveEntriesFromDataBaseForAddressBook(String sql) {
+    public List<Contact> retrieveEntriesFromDataBaseForAddressBook(String sql) {
         getConnection();
         try {
             ResultSet resultSet = statement.executeQuery(sql);
@@ -48,7 +48,7 @@ public class AddressBookService {
         return contacts;
     }
 
-    public static String updateAddressBook(String first_name, String phone_number) {
+    public String updateAddressBook(String first_name, String phone_number) {
         getConnection();
         PreparedStatement preparedStatement = null;
         try {
