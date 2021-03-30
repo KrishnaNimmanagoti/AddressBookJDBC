@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class AddressBookJDBCtest {
@@ -30,7 +32,7 @@ public class AddressBookJDBCtest {
     }
 
     @Test
-    public void retriveEntryByStateOrCityTest() {
+    public void retrieveEntryByStateOrCityTest() {
         AddressBookService addressBookService = new AddressBookService();
         AddressBookService addressBookService2 = new AddressBookService();
         String sql1 = "select * from address_book where state = 'Maharashtra';";
@@ -39,5 +41,14 @@ public class AddressBookJDBCtest {
         List<Contact> dataByCity = addressBookService2.retrieveEntriesFromDataBaseForAddressBook(sql2);
         Assertions.assertEquals(1, dataByState.size());
         Assertions.assertEquals(3, dataByCity.size());
+    }
+
+    @Test
+    public void insretContactInAddressBookDatabaseTest() {
+        AddressBookService addressBookService = new AddressBookService();
+        String first_name = "Haji";
+        String updatedname = addressBookService.insretContactInAddressBookDatabase(first_name,"Shaik", "Eduloor", "Hyderabad", "Delhi",
+                3333, "haji@123.gmail.com", "FellowShip","Friend", Date.valueOf("2021-01-01"));
+        Assertions.assertEquals(first_name,updatedname);
     }
 }
