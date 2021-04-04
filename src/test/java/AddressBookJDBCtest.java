@@ -1,8 +1,9 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import java.sql.Date;
-import java.time.LocalDate;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 
 public class AddressBookJDBCtest {
@@ -48,7 +49,25 @@ public class AddressBookJDBCtest {
         AddressBookService addressBookService = new AddressBookService();
         String first_name = "Haji";
         String updatedname = addressBookService.insretContactInAddressBookDatabase(first_name,"Shaik", "Eduloor", "Hyderabad", "Delhi",
-                3333, "haji@123.gmail.com", "FellowShip","Friend", Date.valueOf("2021-01-01"));
+                3333, "96409343","haji@123.gmail.com", "FellowShip","Friend", Date.valueOf("2021-01-01"));
         Assertions.assertEquals(first_name,updatedname);
+    }
+
+    @Test
+    public void givenContacts_WhenAddedToDB_ShouldMatchEmployeeEntries() {
+        Contact[] arrayOfContact = {
+                new Contact("Sudhakar", "Dharmik", "ModiNo6", "Nagpur", "Maharashtra", 440016, "9865430031",
+                        "rajeshd@gmail.com", "Profession","Colleague", Date.valueOf("2021-03-25")),
+                new Contact("Ravi", "Ghosh", "PimpleGurav", "Pune", "Maharashtra", 411055, "9865854331",
+                        "ghoshalshreya@gmail.com", "Friend","neighbour", Date.valueOf("2021-03-28"))};
+        AddressBookService addressBookService = new AddressBookService();
+        Instant start = Instant.now();
+        addressBookService.addDetails(Arrays.asList(arrayOfContact));
+        Instant end = Instant.now();
+        System.out.println("Duration without thread : " + Duration.between(start, end));
+        Instant threadStart = Instant.now();
+        addressBookService.addDetailsWithThreads(Arrays.asList(arrayOfContact));
+        Instant threadEnd = Instant.now();
+        System.out.println("Duration with Thread : " + Duration.between(threadStart, threadEnd));
     }
 }
