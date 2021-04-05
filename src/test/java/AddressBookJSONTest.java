@@ -24,4 +24,16 @@ public class AddressBookJSONTest {
                 .body("firstName", Matchers.is("Sai"));
         Assertions.assertEquals(201, response.getStatusCode());
     }
+
+    @Test
+    public void testToUpdateContactDataInJSONServer(){
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body("{\"firstName\": \"srinivas\",\"lastName\": \"Nimmanagoti\",\"address\": \"kattangur\",\"city\": \"Nalgonda\",\"state\": \"AndhraPradesh\",\"zip\": \"508205\",\"phoneNumber\": \"9133266613\",\"email\": \"srinivas@gmail.com\",\"personType\": \"Friend\"}")
+                .when().put("http://localhost:3000/addressbook/4");
+        response.then()
+                .body("address", Matchers.is("kattangur"));
+        Assertions.assertEquals(200, response.getStatusCode());
+    }
 }
